@@ -1,14 +1,44 @@
-#30	:  freefire_version	: اصدار اللعبة يتغير كل تحديث.  [ob49]
-#33	:  chat_ip	:  ايبي الحساب
-#882	:  bot account id	:  ايدي الحساب
-#883 و 1005	:  clan id	:  ايدي الكلان	#1865
-#1007	:  clan key	:  يتغير من حساب لحساب
-###################################
-import threading;import jwt;import random;import json;import requests;import google.protobuf;import datetime;from datetime import datetime;import base64;import logging;import re;import socket;import os;import binascii;import sys;import psutil;import time;from important_zitado import*;from time import sleep;from google.protobuf.timestamp_pb2 import Timestamp;from google.protobuf.json_format import MessageToJson;from protobuf_decoder.protobuf_decoder import Parser;from threading import Thread;from Crypto.Cipher import AES;from Crypto.Util.Padding import pad, unpad; import httpx;import urllib3; import MajorLoginRes_pb2;import psutil;import jwt_generator_pb2;import MajorLoginRes_pb2;import psutil
-from flask import Flask
+#سورس بوت كلان ZIX OFFICIAL 
+#كسم كل واحد كلاوي و يغير في المعلومات 
+import threading
+import jwt
+#________________________________
+import random
 from threading import Thread
-####################################
-#FUCK SSL BY FOX
+import json
+import requests
+import google.protobuf
+from protobuf_decoder.protobuf_decoder import Parser
+import json
+#________________________________
+import datetime
+from datetime import datetime
+from google.protobuf.json_format import MessageToJson
+import my_message_pb2
+import data_pb2
+import base64
+#________________________________
+import logging
+import re
+import socket
+#________________________________
+from google.protobuf.timestamp_pb2 import Timestamp
+import jwt_generator_pb2
+import os
+import binascii
+import sys
+#________________________________
+import psutil
+import MajorLoginRes_pb2
+from time import sleep
+from Crypto.Cipher import AES
+#________________________________
+from Crypto.Util.Padding import pad, unpad
+import time
+import urllib3
+from important_zitado import*
+from byte import*
+#DEV ZIX OFFICIAL
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 tempid = None
 sent_inv = False
@@ -31,7 +61,86 @@ client_secret = "2ee44819e9b4598845141067b281621874d0d5d7af9d8f7e00c1e54715b7d1e
 chat_ip = "98.98.162.80"
 chat_port = 39698
 key2 = "ZIX"
-#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#DEV ZIX OFFICIAL V8
+
+#________________________________
+B = '''[1;30m'''
+R = '''[1;31m'''
+G = '''[1;32m'''
+Y = '''[1;33m'''
+Bl = '''[1;34m'''
+P = '''[1;35m'''
+Z = '''[1;36m'''
+W = '''[1;37m'''
+from flask import Flask
+import random
+app = Flask(__name__)
+global_client = None  # سيتم تعيينه عند تشغيل العميل
+from flask import Flask, jsonify
+  # سيتم تعيينه عند تشغيل العميل
+@app.route('/')
+def health_check():
+    return "Server Ready", 200
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+#________________________________
+class LagThread(threading.Thread):
+    def __init__(self, socket_client, team_code, repeat_count, key, iv, uid):
+        threading.Thread.__init__(self)
+        self.socket_client = socket_client
+        self.team_code = team_code
+        self.repeat_count = repeat_count
+        self.key = key
+        self.iv = iv
+        self.uid = uid
+        self.running = True
+        
+    def run(self):
+        try:
+            for i in range(self.repeat_count):
+                if not self.running:
+                    break
+                    
+                for _ in range(1111):
+                    if not self.running:
+                        break
+                        
+                    join_teamcode(self.socket_client, self.team_code, self.key, self.iv)
+                    time.sleep(0)
+                    
+                    leave_packet = self.create_leave_packet()
+                    self.socket_client.send(leave_packet)
+                    time.sleep(0)
+                    
+        except Exception as e:
+            print(f"Error in LagThread: {e}")
+            
+    def create_leave_packet(self):
+        fields = {
+            1: 7,
+            2: {
+                1: 11371687918
+            }
+        }
+        packet = create_protobuf_packet(fields)
+        packet = packet.hex()
+        header_lenth = len(encrypt_packet(packet, self.key, self.iv))//2
+        header_lenth_final = dec_to_hex(header_lenth)
+        
+        if len(header_lenth_final) == 2:
+            final_packet = "0515000000" + header_lenth_final + encrypt_packet(packet, self.key, self.iv)
+        elif len(header_lenth_final) == 3:
+            final_packet = "051500000" + header_lenth_final + encrypt_packet(packet, self.key, self.iv)
+        elif len(header_lenth_final) == 4:
+            final_packet = "05150000" + header_lenth_final + encrypt_packet(packet, self.key, self.iv)
+        elif len(header_lenth_final) == 5:
+            final_packet = "0515000" + header_lenth_final + encrypt_packet(packet, self.key, self.iv)
+            
+        return bytes.fromhex(final_packet)
+        
+    def stop(self):
+        self.running = False
+
 def encrypt_packet(plain_text, key, iv):
     plain_text = bytes.fromhex(plain_text)
     cipher = AES.new(key, AES.MODE_CBC, iv)
@@ -44,6 +153,7 @@ def gethashteam(hexxx):
         raise ValueError("Invalid hex format or empty response from zitado_get_proto")
     data = json.loads(a)
     return data['5']['7']
+
 def getownteam(hexxx):
     a = zitado_get_proto(hexxx)
     if not a:
@@ -96,6 +206,20 @@ def get_player_status(packet):
         return "IN SOCIAL ISLAND MODE .."
 
     return "NOTFOUND"
+def rrrrrrrrrrrrrr(number):
+    if isinstance(number, str) and '***' in number:
+        return number.replace('***', '106')
+    return number
+def talk_with_ai(question):
+    url = f"https://princeaiapi.vercel.app/prince/api/v1/ask?key=prince&ask={question}"
+    res = requests.get(url)
+    if res.status_code == 200:
+        data = res.json()
+        msg = data["message"]["content"]
+        return msg
+    else:
+        return "حدث خطأ أثناء الاتصال بالخادم."
+        
 def get_idroom_by_idplayer(packet):
     json_result = get_available_room(packet)
     parsed_data = json.loads(json_result)
@@ -103,6 +227,7 @@ def get_idroom_by_idplayer(packet):
     data = json_data["1"]["data"]
     idroom = data['15']["data"]
     return idroom
+
 def get_leader(packet):
     json_result = get_available_room(packet)
     parsed_data = json.loads(json_result)
@@ -110,6 +235,27 @@ def get_leader(packet):
     data = json_data["1"]["data"]
     leader = data['8']["data"]
     return leader
+
+def generate_random_color():
+    color_list = [
+        "[00FF00][b][c]",
+        "[FFDD00][b][c]",
+        "[3815F3][b][c]",
+        "[FF0000][b][c]",
+        "[0000FF][b][c]",
+        "[FFA500][b][c]",
+        "[DF07F8][b][c]",
+        "[1996FD][b][c]",
+        "[DCE775][b][c]",
+        "[A8E6CF][b][c]",
+        "[7CB342][b][c]",
+        "[FF0000][b][c]",
+        "[FFB300][b][c]",
+        "[90EE90][b][c]"
+    ]
+    random_color = random.choice(color_list)
+    return random_color
+#صدقت انه بدون ملف بايت ما بشتغل 
 def fix_num(num):
     fixed = ""
     count = 0
@@ -124,7 +270,6 @@ def fix_num(num):
             count = 0  
     return fixed
 
-
 def fix_word(num):
     fixed = ""
     count = 0
@@ -137,219 +282,7 @@ def fix_word(num):
             fixed += "[c]"
             count = 0  
     return fixed
-def rrrrrrrrrrrrrr(number):
-    if isinstance(number, str) and '***' in number:
-        return number.replace('***', '106')
-    return number
-####################################
-
-#Clan-info-by-clan-id
-def Get_clan_info(clan_id):
-    try:
-        url = f"https://get-clan-info.vercel.app/get_clan_info?clan_id={clan_id}"
-        res = requests.get(url)
-        if res.status_code == 200:
-            data = res.json()
-            msg = f""" 
-[de0732][b][c]
-----------------------------------
-▶▶▶▶guild_details◀◀◀◀
-achievements: {data['achievements']}\n\n
-balance : {fix_num(data['balance'])}\n\n
-clan_name : {data['clan_name']}\n\n
-expire_time : {fix_num(data['guild_details']['expire_time'])}\n\n
-members_online : {fix_num(data['guild_details']['members_online'])}\n\n
-regional : {data['guild_details']['regional']}\n\n
-reward_time : {fix_num(data['guild_details']['reward_time'])}\n\n
-total_members : {fix_num(data['guild_details']['total_members'])}\n\n
-id : {fix_num(data['id'])}\n\n
-last_active : {fix_num(data['last_active'])}\n\n
-level : {fix_num(data['level'])}\n\n
-rank : {fix_num(data['rank'])}\n\n
-region : {data['region']}\n\n
-score : {fix_num(data['score'])}\n\n
-timestamp1 : {fix_num(data['timestamp1'])}\n\n
-timestamp2 : {fix_num(data['timestamp2'])}\n\n
-welcome_message: {data['welcome_message']}\n\n
-xp: {fix_num(data['xp'])}\n\n
-----------------------------------
-[FFB300][b][c]ＢＬＲＸᅠ TEAM
-            """
-            return msg
-        else:
-            msg = """
-[de0732][b][c]
-----------------------------------
-
-فشل جلب المعلومات حاول في وقت اخر!!
-
-----------------------------------
-[FFB300][b][c]ＢＬＲＸᅠ TEAM
-            """
-            return msg
-    except:
-        pass
-#GET INFO BY PLAYER ID
-def get_player_info(player_id):
-    url = f"https://projects-fox-apis.vercel.app/player_info?uid={player_id}&key={key}"
-    response = requests.get(url)    
-    if response.status_code == 200:
-        try:
-            r = response.json()
-            return {
-                "Account Booyah Pass": f"{r.get('booyah_pass_level', 'N/A')}",
-                "Account Create": f"{r.get('account_creation_date', 'N/A')}",
-                "Account Level": f"{r.get('level', 'N/A')}",
-                "Account Likes": f" {r.get('likes', 'N/A')}",
-                "Name": f"{r.get('player_name', 'N/A')}",
-                "UID": f" {r.get('player_id', 'N/A')}",
-                "Account Region": f"{r.get('server', 'N/A')}",
-                }
-        except ValueError as e:
-            pass
-            return {
-                "error": "Invalid JSON response"
-            }
-    else:
-        pass
-        return {
-            "error": f"Failed to fetch data: {response.status_code}"
-        }
-#CHAT WITH AI
-def talk_with_ai(question):
-    url = f"https://princeaiapi.vercel.app/prince/api/v1/ask?key=prince&ask={question}"
-    res = requests.get(url)
-    if res.status_code == 200:
-        data = res.json()
-        msg = data["message"]["content"]
-        return msg
-    else:
-        return "حدث خطأ أثناء الاتصال بالخادم."
-#SPAM REQUESTS
-def spam_requests(player_id):
-    url = f"https://spam-fr-lk-team.vercel.app/send_requests?uid={player_id}"
-    res = requests.get(url)
-    if res.status_code == 200:
-        return "Spam is Good"
-    else:
-        return "fuck spam"
-import requests
-####################################
-#ADD REQUESTS#######################
-def spam_requests(player_id):
-    url = f"https://add-time-isso.vercel.app/add_uid?uid={player_id}&time=1&type=days"
-    res = requests.get(url)
-    if res.status_code == 200:
-        return "add is Good"
-    else:
-        return "error add"
-import requests
-####################################
-####################################
-
-import requests
-
-def newinfo(uid):
-    try:
-        response = requests.get(f"https://projects-foxx-garena-apis.vercel.app/accinfo?uid={uid}&region=ME&api_key=CdxGfoxProjext1kmembers")
-        
-        if response.status_code == 200:
-            response = response.json()
-            basic_info = response['basicInfo']
-            
-            # تعديل basic_info لتحتوي على الحقول المطلوبة
-            formatted_basic = {
-                'level': basic_info.get('level', 0),
-                'likes': basic_info.get('liked', 0),
-                'username': basic_info.get('nickname', 'Unknown'),
-                'region': basic_info.get('region', 'Unknown'),
-                'bio': response.get('socialInfo', {}).get('socialHighlight', 'No Bio'),
-                'brrankscore': basic_info.get('rankingPoints', 0),
-                'Exp': basic_info.get('exp', 0)
-            }
-            
-            # معالجة معلومات العشيرة (غير متوفرة في API الجديد بنفس الهيكل)
-            clan_info = response.get('clanBasicInfo', {})
-            if not clan_info:
-                clan_info = "false"
-                clan_admin_info = "false"
-            else:
-                # إذا كانت هناك معلومات عشيرة ولكن بهيكل مختلف
-                clan_admin_info = {
-                    'adminname': 'Unknown',
-                    'brpoint': 0,
-                    'exp': 0,
-                    'idadmin': 0,
-                    'level': 0
-                }
-                # يمكنك تعديل هذا الجزء حسب البيانات المتاحة فعلياً
-                clan_info = {
-                    'clanid': clan_info.get('id', 0),
-                    'clanname': clan_info.get('name', 'Unknown Clan'),
-                    'guildlevel': clan_info.get('level', 0),
-                    'livemember': clan_info.get('membersCount', 0)
-                }
-            
-            info = {
-                'basic_info': formatted_basic,
-                'clan_info': clan_info,  # ملاحظة: هناك خطأ إملائي هنا (clan_info بدلاً من clan_info)
-                'clan_admin': clan_admin_info
-            }
-            return {"status": "ok", "info": info}
-        else:
-            return {"status": "wrong_id"}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
-	
-#ADDING-100-LIKES-IN-24H
-import requests
-
-def send_likes(uid):
-    try:
-        likes_api_response = requests.get(
-            f"https://mg-bd.vercel.app/like?uid={uid}&server_name=me&key=taitan_gay_leaker"
-        )
-        
-        message = (
-            f"[C][B][FF0000]________________________\n"
-            f" Wrong ID .......\n"
-            f" Please Check Again\n"
-            f"________________________"
-        )
-        
-        if likes_api_response.status_code == 200:
-            api_json_response = likes_api_response.json()
-            
-            # التحقق من حالة الإعجابات (status 2 يعني أن العملية لم تنجح)
-            if api_json_response.get('status') != 2:
-                player_name = api_json_response.get('PlayerNickname', 'Unknown')
-                likes_before = api_json_response.get('LikesbeforeCommand', 0)
-                likes_after = api_json_response.get('LikesafterCommand', 0)
-                likes_added = api_json_response.get('LikesGivenByAPI', 0)
-                
-                message = (
-                    f"________________________\n"
-                    f" Likes Status :\n"
-                    f" LIKES SENT !\n\n"
-                    f" PLAYER NAME : {player_name}\n"
-                    f" LIKES ADDED : {likes_added}\n"
-                    f" LIKES BEFORE : {likes_before}\n"
-                    f" LIKES AFTER : {likes_after}\n"
-                    f"________________________"
-                )
-            else:
-                message = (
-                    f"[C][B][FF0000]________________________\n"
-                    f" لقد وصلت الى الحد اليومي في لايكات حاول بعد 24 ساعة\n"
-                    f" (Status: {api_json_response.get('status')})\n"
-                    f"________________________"
-                )
-                
-        return message
-    except Exception as e:
-        return f"Error: {str(e)}"
-####################################
-#CHECK ACCOUNT IS BANNED
+    
 def check_banned_status(player_id):
     url = f"http://amin-team-api.vercel.app/check_banned?player_id={player_id}"
     try:
@@ -361,209 +294,153 @@ def check_banned_status(player_id):
             return {"error": f"Failed to fetch data. Status code: {response.status_code}"}
     except Exception as e:
         return {"error": str(e)}
-####################################
-def Encrypt(number):
-    try:
-        number = int(number)
-        encoded_bytes = []
-        while True:
-            byte = number & 0x7F
-            number >>= 7
-            if number:
-                byte |= 0x80
-            encoded_bytes.append(byte)
-            if not number:
-                break
-        return bytes(encoded_bytes).hex()
-    except:
-        restart_program()
-#############CLASS RANDOM###########
-def  generate_random_word():
-    word_list = [
-        "XNXXX", "ZBI", "ＢＬＲＸᅠ TEAM", "NIKMOK",
-        "PUSY", "FUCK YOU", "fuke_any_team", "انيك_امك", "PORNO",
-        "FUCK YOUR MATHER", "نيك_ختك", "MOROOCOO", "kissss omkk", "امك_كسها_وردي",
-        "WAAA DAK W9", "ZAMLLL", "يانقش", "9WAD", "طبونك_مقود",
-        "كسك", "انيكمك", "اقعد_يعرص", "اححح", "DIMA RAJA",
-        "ستريمرز_فاشل", "FOXXXX", "يخول", "ترمتك_غوز", "سوتك_جميله",
-        "هههههههههههه", "سوتك_غوز", "يانيكمك", "ابلع_ياعرص", "يا_لبوت",
-        "يازبي", "كسك_قوه", "كسك", "انطلق_فكسك", "يافاشل",
-        "يازانيه", "ياقلوتي", "كسك", "نشدك_نحوؤك", "سوتك",
-        "يافاشل", "نيكمك", "كوسمك", "يكسمك", "هضرب_عشره_عليك", "لحاااااس", " FOXXX", "TELEGRAM:@S_DD_F"
-    ]
 
-    return random.choice(word_list)
-def generate_random_color():
-	color_list = [
-    "[00FF00][b][c]",
-    "[FFDD00][b][c]",
-    "[3813F3][b][c]",
-    "[FF0000][b][c]",
-    "[0000FF][b][c]",
-    "[FFA500][b][c]",
-    "[DF07F8][b][c]",
-    "[de0732][b][c]",
-    "[DCE775][b][c]",
-    "[A8E6CF][b][c]",
-    "[7CB342][b][c]",
-    "[FF0000][b][c]",
-    "[FFB300][b][c]",
-    "[90EE90][b][c]",
-    "[FF4500][b][c]",
-    "[FFD700][b][c]",
-    "[32CD32][b][c]",
-    "[87CEEB][b][c]",
-    "[9370DB][b][c]",
-    "[FF69B4][b][c]",
-    "[8A2BE2][b][c]",
-    "[00BFFF][b][c]",
-    "[1E90FF][b][c]",
-    "[20B2AA][b][c]",
-    "[00FA9A][b][c]",
-    "[008000][b][c]",
-    "[FFFF00][b][c]",
-    "[FF8C00][b][c]",
-    "[DC143C][b][c]",
-    "[FF6347][b][c]",
-    "[FFA07A][b][c]",
-    "[FFDAB9][b][c]",
-    "[CD853F][b][c]",
-    "[D2691E][b][c]",
-    "[BC8F8F][b][c]",
-    "[F0E68C][b][c]",
-    "[556B2F][b][c]",
-    "[808000][b][c]",
-    "[4682B4][b][c]",
-    "[6A5ACD][b][c]",
-    "[7B68EE][b][c]",
-    "[8B4513][b][c]",
-    "[C71585][b][c]",
-    "[4B0082][b][c]",
-    "[B22222][b][c]",
-    "[228B22][b][c]",
-    "[8B008B][b][c]",
-    "[483D8B][b][c]",
-    "[556B2F][b][c]",
-    "[800000][b][c]",
-    "[008080][b][c]",
-    "[000080][b][c]",
-    "[800080][b][c]",
-    "[808080][b][c]",
-    "[A9A9A9][b][c]",
-    "[D3D3D3][b][c]",
-    "[F0F0F0][b][c]"
-]
-	random_color = random.choice(color_list)
-	return  random_color
-def get_random_avatar():
-    avatar_list = [
-        '902000061', '902000060', '902000064', '902000065', '902000066', 
-        '902000074', '902000075', '902000077', '902000078', '902000084', 
-        '902000085', '902000087', '902000091', '902000094', '902000306','902000091','902000208','902000209','902000210','902000211','902047016','902047016','902000347'
-    ]
-    return random.choice(avatar_list)
+
+    return message        
+
 def rrrrrrrrrrrrrr(number):
     if isinstance(number, str) and '***' in number:
         return number.replace('***', '106')
     return number
-#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-class FF_CLIENT(threading.Thread):
-    def __init__(self, id, password):
-        self.id = id
-        self.password = password
-        self.key = None
-        self.iv = None
-        self.get_tok()
-    def connect(self, tok, host, port, packet, key, iv):
-        global clients
-        clients = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        port = int(port)
-        clients.connect((host, port))
-        clients.send(bytes.fromhex(tok))
 
-        while True:
-            data = clients.recv(9999)
-            if data == b"":
-                print("Connection closed by remote host")
-                break           
-#GET AVAILABLE ROOM
-def get_available_room(input_text):
+def newinfo(uid):
     try:
-        parsed_results = Parser().parse(input_text)
-        parsed_results_objects = parsed_results
-        parsed_results_dict = parse_results(parsed_results_objects)
-        json_data = json.dumps(parsed_results_dict)
-        return json_data
+        url = f"https://zix-official-info-ob50.vercel.app/get?uid={uid}"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            data = response.json()
+            print(f"Response Data: {data}")
+
+            if "basicinfo" in data and isinstance(data["basicinfo"], list) and len(data["basicinfo"]) > 0:
+                data["basic_info"] = data["basicinfo"][0]
+            else:
+                print("Error: 'basicinfo' key not found or empty")
+                return {"status": "wrong_id"}
+
+            if "claninfo" in data and isinstance(data["claninfo"], list) and len(data["claninfo"]) > 0:
+                data["clan_info"] = data["claninfo"][0]
+            else:
+                data["clan_info"] = "false"
+
+            if "clanadmin" in data and isinstance(data["clanadmin"], list) and len(data["clanadmin"]) > 0:
+                data["clan_admin"] = data["clanadmin"][0]
+            else:
+                data["clan_admin"] = "false"
+
+            return {"status": "ok", "info": data}
+
+        elif response.status_code == 500:
+            print("Server Error: 500 - Internal Server Error")
+            return {"status": "error", "message": "Server error, please try again later."}
+
+        print(f"Error: Unexpected status code {response.status_code}")
+        return {"status": "wrong_id"}
+
     except Exception as e:
-        print(f"error {e}")
-        return None
-#PARSE RESULTS
-def parse_results(parsed_results):
-    result_dict = {}
-    for result in parsed_results:
-        field_data = {}
-        field_data["wire_type"] = result.wire_type
-        if result.wire_type == "varint":
-            field_data["data"] = result.data
-        if result.wire_type == "string":
-            field_data["data"] = result.data
-        if result.wire_type == "bytes":
-            field_data["data"] = result.data
-        elif result.wire_type == "length_delimited":
-            field_data["data"] = parse_results(result.data.results)
-        result_dict[result.field] = field_data
-    return result_dict
-#DECODE TO HEX
-def dec_to_hex(ask):
-    ask_result = hex(ask)
-    final_result = str(ask_result)[2:]
-    if len(final_result) == 1:
-        final_result = "0" + final_result
-    return final_result
-#ENCODE MESSAGE
-def encrypt_message(plaintext):
-    key = b'Yg&tc%DEuh6%Zc^8'
-    iv = b'6oyZDr22E3ychjM%'
-    cipher = AES.new(key, AES.MODE_CBC, iv)
-    padded_message = pad(plaintext, AES.block_size)
-    encrypted_message = cipher.encrypt(padded_message)
-    return binascii.hexlify(encrypted_message).decode('utf-8')
-#ENCODE API
-def encrypt_api(plain_text):
-    plain_text = bytes.fromhex(plain_text)
-    key = bytes([89, 103, 38, 116, 99, 37, 68, 69, 117, 104, 54, 37, 90, 99, 94, 56])
-    iv = bytes([54, 111, 121, 90, 68, 114, 50, 50, 69, 51, 121, 99, 104, 106, 77, 37])
-    cipher = AES.new(key, AES.MODE_CBC, iv)
-    cipher_text = cipher.encrypt(pad(plain_text, AES.block_size))
-    return cipher_text.hex()
-####################################
-def extract_jwt_from_hex(hex):
-    byte_data = binascii.unhexlify(hex)
-    message = jwt_generator_pb2.Garena_420()
-    message.ParseFromString(byte_data)
-    json_output = MessageToJson(message)
-    token_data = json.loads(json_output)
-    return token_data
-def format_timestamp(timestamp):
-    return datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-####################################
-def restart_program():
-    p = psutil.Process(os.getpid())
-    open_files = p.open_files()
-    connections = psutil.net_connections()
-    for handler in open_files:
-        try:
-            os.close(handler.fd)
-        except Exception:
-            pass            
-    for conn in connections:
-        try:
-            conn.close()
-        except Exception:
-            pass
-    sys.path.append(os.path.dirname(os.path.abspath(sys.argv[0])))
-    python = sys.executable
-    os.execl(python, python, *sys.argv)
+        print(f"Error in newinfo: {str(e)}")
+        return {"status": "error", "message": str(e)}
+	
+def send_spam(uid):
+    try:
+        info_response = newinfo(uid)
+        
+        if info_response.get('status') != "ok":
+            return (
+                f"[FF0000]-----------------------------------\n"
+                f"خطأ في المعرف: {fix_num(uid)}\n"
+                f"الرجاء التحقق من الرقم\n"
+                f"-----------------------------------\n"
+            )
+        
+        api_url = f"https://zix-official-spam-friend.vercel.app/SPM?uid={uid}"
+        response = requests.get(api_url)
+        
+        if response.status_code == 200:
+            return (
+                f"{generate_random_color()}-----------------------------------\n"
+                f"تم إرسال طلب صداقة بنجاح ✅\n"
+                f"إلى: {fix_num(uid)}\n"
+                f"-----------------------------------\n"
+            )
+        else:
+            return (
+                f"[FF0000]-----------------------------------\n"
+                f"فشل الإرسال (كود الخطأ: {response.status_code})\n"
+                f"-----------------------------------\n"
+            )
+            
+    except requests.exceptions.RequestException as e:
+        return (
+            f"[FF0000]-----------------------------------\n"
+            f"فشل الاتصال بالخادم:\n"
+            f"{str(e)}\n"
+            f"-----------------------------------\n"
+        )
+
+def send_likes(uid):
+    likes_api_response = requests.get(f"https://zix-official-likes-ccta.vercel.app/like?uid={uid}")
+    
+    if likes_api_response.status_code == 200:
+        api_data = likes_api_response.json()
+
+        message_text = api_data.get("message", "").lower()
+        status = api_data.get("status", "").lower()
+
+        if "لم تُحتسب" in message_text or "limit" in message_text or status == "warning":
+            return {
+                "status": "failed",
+                "message": (
+                    f"[C][B][FF0000]________________________\n"
+                    f" ❌ Daily like limit reached!\n"
+                    f" Try again after 24 hours\n"
+                    f"________________________"
+                )
+            }
+        else:
+            return {
+                "status": "ok",
+                "message": (
+                    f"[C][B][00FF00]________________________\n"
+                    f" ✅ Likes sent successfully!\n"
+                    f" Previous Likes: {api_data.get('likes_before', 'N/A')}\n"
+                    f" New Likes: {api_data.get('likes_after', 'N/A')}\n"
+                    f" Likes Added: {api_data.get('likes_added', 'N/A')}\n"
+                    f"________________________"
+                )
+            }
+    else:
+        return {
+            "status": "failed",
+            "message": (
+                f"[C][B][FF0000]________________________\n"
+                f" ❌ Failed to send!\n"
+                f" Check the user ID\n"
+                f"________________________"
+            )
+        }
+        
+
+		
+def Encrypt(number):
+    number = int(number)
+    encoded_bytes = []
+    
+    while True:
+        byte = number & 0x7F
+        number >>= 7
+        if number:
+            byte |= 0x80
+
+        encoded_bytes.append(byte)
+        if not number:
+            break
+
+    return bytes(encoded_bytes).hex()
+def get_random_avatar():
+	avatar_list = ['902033020']
+	random_avatar = random.choice(avatar_list)
+	return  random_avatar
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 class FF_CLIENT(threading.Thread):
     def __init__(self, id, password):
@@ -572,7 +449,10 @@ class FF_CLIENT(threading.Thread):
         self.password = password
         self.key = None
         self.iv = None
+        self.lag_thread = None
         self.get_tok()
+
+
 
     def parse_my_message(self, serialized_data):
         try:
@@ -604,12 +484,14 @@ class FF_CLIENT(threading.Thread):
         except Exception as e:
             print(f"Error in nmnmmmmn: {e}")
 
+
+
     def spam_room(self, idroom, idplayer):
         fields = {
         1: 78,
         2: {
             1: int(idroom),
-            2: f"{generate_random_color()}{generate_random_word()}",
+            2: "[ff0006]ZIX OFFICIAL",
             4: 330,
             5: 6000,
             6: 201,
@@ -631,6 +513,7 @@ class FF_CLIENT(threading.Thread):
         elif len(header_lenth_final) == 5:
             final_packet = "0E15000" + header_lenth_final + self.nmnmmmmn(packet)
         return bytes.fromhex(final_packet)
+
     def send_squad(self, idplayer):
         fields = {
             1: 33,
@@ -674,11 +557,12 @@ class FF_CLIENT(threading.Thread):
         elif len(header_lenth_final) == 5:
             final_packet = "0515000" + header_lenth_final + self.nmnmmmmn(packet)
         return bytes.fromhex(final_packet)
+
     def start_autooo(self):
         fields = {
         1: 9,
         2: {
-            1: 11495762622
+            1: 11371687918
         }
         }
         packet = create_protobuf_packet(fields)
@@ -694,12 +578,12 @@ class FF_CLIENT(threading.Thread):
         elif len(header_lenth_final) == 5:
             final_packet = "0515000" + header_lenth_final + self.nmnmmmmn(packet)
         return bytes.fromhex(final_packet)
+
     def invite_skwad(self, idplayer):
         fields = {
         1: 2,
         2: {
             1: int(idplayer),
-            10: int(get_random_avatar()),
             2: "ME",
             4: 1
         }
@@ -716,50 +600,7 @@ class FF_CLIENT(threading.Thread):
             final_packet = "05150000" + header_lenth_final + self.nmnmmmmn(packet)
         elif len(header_lenth_final) == 5:
             final_packet = "0515000" + header_lenth_final + self.nmnmmmmn(packet)
-        return bytes.fromhex(final_packet)
-    def request_skwad(self, idplayer):
-        fields = {
-        1: 33,
-        2: {
-            1: int(idplayer),
-            2: "ME",
-            3: 1,
-            4: 1,
-            7: 330,
-            8: 19459,
-            9: 100,
-            12: 1,
-            16: 1,
-            17: {
-            2: 94,
-            6: 11,
-            8: "1.109.5",
-            9: 3,
-            10: 2
-            },
-            18: 201,
-            23: {
-            2: 1,
-            3: 1
-            },
-            24: int(get_random_avatar()),
-            26: {},
-            28: {}
-        }
-        }
-        packet = create_protobuf_packet(fields)
-        packet = packet.hex()
-        header_lenth = len(encrypt_packet(packet, key, iv))//2
-        header_lenth_final = dec_to_hex(header_lenth)
-        if len(header_lenth_final) == 2:
-            final_packet = "0515000000" + header_lenth_final + self.nmnmmmmn(packet)
-        elif len(header_lenth_final) == 3:
-            final_packet = "051500000" + header_lenth_final + self.nmnmmmmn(packet)
-        elif len(header_lenth_final) == 4:
-            final_packet = "05150000" + header_lenth_final + self.nmnmmmmn(packet)
-        elif len(header_lenth_final) == 5:
-            final_packet = "0515000" + header_lenth_final + self.nmnmmmmn(packet)
-        return bytes.fromhex(final_packet)
+        return bytes.fromhex(final_packet)                
     def skwad_maker(self):
         fields = {
         1: 1,
@@ -794,11 +635,12 @@ class FF_CLIENT(threading.Thread):
         elif len(header_lenth_final) == 5:
             final_packet = "0515000" + header_lenth_final + self.nmnmmmmn(packet)
         return bytes.fromhex(final_packet)
+
     def changes(self, num):
         fields = {
         1: 17,
         2: {
-            1: 11516784163,
+            1: 11371687918,
             2: 1,
             3: int(num),
             4: 62,
@@ -826,7 +668,7 @@ class FF_CLIENT(threading.Thread):
         fields = {
         1: 7,
         2: {
-            1: 11495762622
+            1: 11371687918
         }
         }
 
@@ -843,6 +685,7 @@ class FF_CLIENT(threading.Thread):
         elif len(header_lenth_final) == 5:
             final_packet = "0515000" + header_lenth_final + self.nmnmmmmn(packet)
         return bytes.fromhex(final_packet)
+
     def leave_room(self, idroom):
         fields = {
         1: 6,
@@ -864,11 +707,64 @@ class FF_CLIENT(threading.Thread):
         elif len(header_lenth_final) == 5:
             final_packet = "0E15000" + header_lenth_final + self.nmnmmmmn(packet)
         return bytes.fromhex(final_packet)
+
     def stauts_infoo(self, idd):
         fields = {
         1: 7,
         2: {
-            1: 11495762622
+            1: 11371687918
+        }
+        }
+
+        packet = create_protobuf_packet(fields)
+        packet = packet.hex()
+        header_lenth = len(encrypt_packet(packet, key, iv))//2
+        header_lenth_final = dec_to_hex(header_lenth)
+        if len(header_lenth_final) == 2:
+            final_packet = "0515000000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 3:
+            final_packet = "051500000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 4:
+            final_packet = "05150000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 5:
+            final_packet = "0515000" + header_lenth_final + self.nmnmmmmn(packet)
+        return bytes.fromhex(final_packet)     
+           
+    def createpacketinfo(self, idddd):
+        ida = Encrypt(idddd)
+        packet = f"080112090A05{ida}1005"
+        header_lenth = len(encrypt_packet(packet, key, iv))//2
+        header_lenth_final = dec_to_hex(header_lenth)
+        if len(header_lenth_final) == 2:
+            final_packet = "0F15000000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 3:
+            final_packet = "0F1500000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 4:
+            final_packet = "0F150000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 5:
+            final_packet = "0F15000" + header_lenth_final + self.nmnmmmmn(packet)
+        return bytes.fromhex(final_packet)
+
+    def accept_sq(self, hashteam, idplayer, ownerr):
+        fields = {
+        1: 4,
+        2: {
+            1: int(ownerr),
+            3: int(idplayer),
+            4: "\u0001\u0007\t\n\u0012\u0019\u001a ",
+            8: 1,
+            9: {
+            2: 1393,
+            4: "ZIX OFFICIAL",
+            6: 11,
+            8: "1.109.5",
+            9: 3,
+            10: 2
+            },
+            10: hashteam,
+            12: 1,
+            13: "en",
+            16: "OR"
         }
         }
 
@@ -886,7 +782,29 @@ class FF_CLIENT(threading.Thread):
             final_packet = "0515000" + header_lenth_final + self.nmnmmmmn(packet)
         return bytes.fromhex(final_packet)
 
+    def info_room(self, idrooom):
+        fields = {
+        2: {
+            1: int(idrooom),
+            3: {},
+            4: 1,
+            6: "en"
+        }
+        }
 
+        packet = create_protobuf_packet(fields)
+        packet = packet.hex()
+        header_lenth = len(encrypt_packet(packet, key, iv))//2
+        header_lenth_final = dec_to_hex(header_lenth)
+        if len(header_lenth_final) == 2:
+            final_packet = "0E15000000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 3:
+            final_packet = "0E1500000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 4:
+            final_packet = "0E150000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 5:
+            final_packet = "0E15000" + header_lenth_final + self.nmnmmmmn(packet)
+        return bytes.fromhex(final_packet)
 
 
 
@@ -895,7 +813,7 @@ class FF_CLIENT(threading.Thread):
         fields = {
         1: 1,
         2: {
-            1: 11495762622,#bot account id
+            1: 12194779602,#bot account id
             2: 3082574840,#clan id
             3: 1,
             4: str(Msg),
@@ -910,7 +828,7 @@ class FF_CLIENT(threading.Thread):
             },
             10: "en",
             13: {
-            1: "https://lh3.googleusercontent.com/a/ACg8ocL7eKRT-gDmquqmXjHGRbWqFBQmcNgB_nTfeicGt61c-PndxQ=s96-c", #ذكاء اصطناعي
+            1: "https://lh3.googleusercontent.com/a/ACg8ocLP5THAwyZc0VmDXVRiNyKPxGYnALBU4bfb9OzVMHvI_t3YioI=s96-c",
             2: 1,
             3: 1
             },
@@ -1172,9 +1090,192 @@ class FF_CLIENT(threading.Thread):
                     tempdata1 = f"{tempdata}\nRoom name : {nameroom}\nMax player : {maxplayer1}\nLive player : {nowplayer1}"
                     print(tempdata1)
                     
+    def start_spam(self, player_id):
+        self.spam_active = True
+        def spam_loop():
+            while self.spam_active:
+                try:
+                    invskwad = self.request_skwad(player_id)
+                    socket_client.send(invskwad)
+                    time.sleep(0.5)
+                except Exception as e:
+                    print(f"Error in spam thread: {e}")
+                    break
+        
+        spam_thread = Thread(target=spam_loop)
+        spam_thread.daemon = True
+        spam_thread.start()
 
-                    
+    def stop_spam(self):
+        self.spam_active = False
+
+    def start_room_spam(self, room_id, player_id):
+        self.room_spam_active = True
+        def room_spam_loop():
+            packetspam = self.spam_room(room_id, player_id)
+            while self.room_spam_active:
+                try:
+                    socket_client.send(packetspam)
+                    time.sleep(0.9)
+                except Exception as e:
+                    print(f"Error in room spam thread: {e}")
+                    break
+        
+        room_thread = Thread(target=room_spam_loop)
+        room_thread.daemon = True
+        room_thread.start()
+
+    def stop_room_spam(self):
+        self.room_spam_active = False
+
+    def handle_spam_command(self, data):
+        try:
+            command_split = re.split("/spam", str(data))
+            if len(command_split) > 1:
+                player_id = command_split[1].split('(')[0].strip()
+                if "***" in player_id:
+                    player_id = player_id.replace("***", "106")
+
+                print(f"Starting spam for player: {player_id}")
+                json_result = get_available_room(data.hex()[10:])
+                parsed_data = json.loads(json_result)
+                uid = parsed_data["5"]["data"]["1"]["data"]
                 
+                self.start_spam(player_id)
+                
+                clients.send(
+                    self.GenResponsMsg(
+                        f"{generate_random_color()}تم بدء سبام الإنضمام للاعب {fix_num(player_id)}",
+                        uid))
+
+        except Exception as e:
+            print(f"Error in /spam command: {e}")
+
+    def handle_room_command(self, data):
+        try:
+            command_split = re.split("/room", str(data))
+            if len(command_split) > 1:
+                player_id = command_split[1].split('(')[0].strip()
+                if "***" in player_id:
+                    player_id = player_id.replace("***", "106")
+
+                print(f"Checking player room status: {player_id}")
+                json_result = get_available_room(data.hex()[10:])
+                parsed_data = json.loads(json_result)
+                uid = parsed_data["5"]["data"]["1"]["data"]
+                
+                packetmaker = self.createpacketinfo(player_id)
+                socket_client.send(packetmaker)
+                time.sleep(1)
+                
+                if "IN ROOM" in tempdata:
+                    room_id = get_idroom_by_idplayer(data22)
+                    self.start_room_spam(room_id, player_id)
+                    
+                    clients.send(
+                        self.GenResponsMsg(
+                            f"{generate_random_color()}تم بدء سبام الروم للاعب {fix_num(player_id)}",
+                            uid))
+                else:
+                    clients.send(
+                        self.GenResponsMsg(
+                            f"{generate_random_color()}اللاعب ليس في روم حالياً",
+                            uid))
+
+        except Exception as e:
+            print(f"Error in /room command: {e}")                    
+                
+                    
+            if data2 == b"":
+                
+                print("Connection closed by remote host")
+
+    def join_room_chanel(self, room_id, room_code):
+        key, iv = self.key, self.iv
+        fields = {
+            1: 3,
+            2: {
+                1: int(room_id),
+                2: 3,
+                3: "ar",
+                4: room_code, 
+            }
+        }
+        packet = create_protobuf_packet(fields)
+        packet = packet.hex()
+        header_lenth = len(encrypt_packet(packet, key, iv)) // 2
+        header_lenth_final = dec_to_hex(header_lenth)
+        if len(header_lenth_final) == 2:
+            final_packet = "1215000000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 3:
+            final_packet = "121500000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 4:
+            final_packet = "12150000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 5:
+            final_packet = "1215000" + header_lenth_final + self.nmnmmmmn(packet)
+        return bytes.fromhex(final_packet)
+                    
+    def request_skwad(self, idplayer):
+        print(R)
+        
+        fields = {
+        1: 33,
+        2: {
+            1: int(idplayer),
+            2: "ME",
+            3: 1,
+            4: 1,
+            7: 330,
+            8: 19459,
+            9: 100,
+            12: 1,
+            16: 1,
+            17: {
+            2: 94,
+            6: 11,
+            8: "1.109.5",
+            9: 3,
+            10: 2
+            },
+            18: 201,
+            23: {
+            2: 1,
+            3: 1
+            },
+            24: 902033020,
+            26: {},
+            28: {}
+        }
+        }
+        packet = create_protobuf_packet(fields)
+        packet = packet.hex()
+        header_lenth = len(encrypt_packet(packet, key, iv))//2
+        header_lenth_final = dec_to_hex(header_lenth)
+        if len(header_lenth_final) == 2:
+            final_packet = "0515000000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 3:
+            final_packet = "051500000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 4:
+            final_packet = "05150000" + header_lenth_final + self.nmnmmmmn(packet)
+        elif len(header_lenth_final) == 5:
+            final_packet = "0515000" + header_lenth_final + self.nmnmmmmn(packet)
+        
+        print(bytes.fromhex(final_packet))
+        return bytes.fromhex(final_packet)
+    def comudnity(packet_int):
+        
+        def send_packet():
+            
+            socket_client.send(packet_int)
+            print("Succesfully")
+        
+        threads = []
+        for _ in range(40):
+            import time
+            time.sleep(0.10)
+            thread = threading.Thread(target=send_packet)
+            thread.start()
+            threads.append(thread)                
                     
             if data2 == b"":
                 
@@ -1254,7 +1355,6 @@ class FF_CLIENT(threading.Thread):
 [b][c][ffd319]Ⓥ[00FF00]telegram[FFD54F]: @ishakspeed
 
 [b][c][ffd319]Ⓥ[00FF00] instagram[FFD54F]: ishak_ishak.26
-
 """
                             )
                         )
@@ -1262,7 +1362,7 @@ class FF_CLIENT(threading.Thread):
                     pass
 ####################################
             #SEND SKWAD 5 TO ID ->> COMMAND
-            if "1200" in data.hex()[0:4] and b"/snd" in data:
+            if "1200" in data.hex()[0:4] and b"/5 " in data:
                 try:
                     message = data.decode('utf-8', errors='ignore')
                     unwanted_chars = ["(J,", "(J@", "(", ")", "@", ","]
@@ -1274,8 +1374,8 @@ class FF_CLIENT(threading.Thread):
                         message_parts = cleaned_message.split()
                         iddd = None
                         for part in message_parts:
-                            if '/snd' in part:
-                                digits = ''.join(filter(str.isdigit, part.split('/snd')[1]))
+                            if '//5 ' in part:
+                                digits = ''.join(filter(str.isdigit, part.split('/5 ')[1]))
                                 if digits:
                                     iddd = int(digits)
                                     break
@@ -1289,13 +1389,7 @@ class FF_CLIENT(threading.Thread):
                     parsed_data = json.loads(json_result)
                     sender_id = parsed_data["5"]["data"]["1"]["data"]
                     sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                    if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-            )
-        )
-                    else:
+                    if True:
                         packetmaker = self.skwad_maker()
                         socket_client.send(packetmaker)
                         sleep(1)
@@ -1305,15 +1399,12 @@ class FF_CLIENT(threading.Thread):
                         uid = parsed_data["5"]["data"]["1"]["data"]
                         iddd = fix_num(iddd)
                         clients.send(self.GenResponsMsg(f"""
-[b][FF0000] -----------------------------------
-
-[66ff0d] (+) تــم انشــاء الــسكواد 5 الى لاعب:
-
-[ff00ff]  {iddd}
-
-[0dd3ff]    أقـــبل الطـلـب بســرعـة !!
-
-[b][FF0000] -----------------------------------
+                [11EAFD][b][c]
+                °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                تم فتح سكواد 5 الى الاعب : 
+                {iddd}
+                °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                [FFB300][b][c]BOT MADE BY ZIX OFFICIAL 
                 """))
                         sleep(5)
                         leavee = self.leave_s()
@@ -1328,18 +1419,14 @@ class FF_CLIENT(threading.Thread):
                         restart_program()
 ####################################
             #MAKE SKWAD 3 ->> COMMAND
-            if "1200" in data.hex()[0:4] and b"/3" in data:
+            if "1200" in data.hex()[0:4] and b"/3s" in data:
                 json_result = get_available_room(data.hex()[10:])
                 parsed_data = json.loads(json_result)
                 sender_id = parsed_data["5"]["data"]["1"]["data"]
                 sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]انت ميش عامل تاغ!\n[ffffff]لزمك تعمل تاغ الكلان حتا يكون لديك الحق فإستخدام البوت"
-            )
-        )
-                else:
+                if True:
+
+                
                     packetmaker = self.skwad_maker()
                     socket_client.send(packetmaker)             
                     sleep(1)
@@ -1352,13 +1439,12 @@ class FF_CLIENT(threading.Thread):
     	                clients.send(
     	                    self.GenResponsMsg(
     	                        f"""
-[b][FF0000] -----------------------------------
-
-[66ff0d] (+) تــم انشــاء الــسكواد بـنــجاح
-
-[0dd3ff]    أقـــبل الطـلـب بســرعـة !!
-
-[b][FF0000] -----------------------------------
+    [11EAFD][b][c]
+    °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    إقبل طلب بسرعة!!!
+    
+    °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    [FFB300][b][c]BOT MADE BY TEAM
     	                        """
     	                    )
     	                )
@@ -1366,18 +1452,12 @@ class FF_CLIENT(threading.Thread):
                     leavee = self.leave_s()
                     socket_client.send(leavee)   
             #MAKE SKWAD 4 ->> COMMAND
-            if "1200" in data.hex()[0:4] and b"/4" in data:
+            if "1200" in data.hex()[0:4] and b"/4s" in data:
                 json_result = get_available_room(data.hex()[10:])
                 parsed_data = json.loads(json_result)
                 sender_id = parsed_data["5"]["data"]["1"]["data"]
                 sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-            )
-        )
-                else:
+                if True:
                     packetmaker = self.skwad_maker()
                     socket_client.send(packetmaker)             
                     sleep(1)
@@ -1390,13 +1470,12 @@ class FF_CLIENT(threading.Thread):
     	                clients.send(
     	                    self.GenResponsMsg(
     	                        f"""
-[b][FF0000] -----------------------------------
-
-[66ff0d] (+) تــم انشــاء الــسكواد بـنــجاح
-
-[0dd3ff]    أقـــبل الطـلـب بســرعـة !!
-
-[b][FF0000] -----------------------------------
+    [11EAFD][b][c]
+    °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    إقبل طلب بسرعة!!!
+    
+    °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    [FFB300][b][c]BOT MADE BY ZIX OFFICIAL TEAM
     	                        """
     	                    )
     	                )
@@ -1404,18 +1483,12 @@ class FF_CLIENT(threading.Thread):
                     leavee = self.leave_s()
                     socket_client.send(leavee) 
             #MAKE SKWAD 5 ->> COMMAND
-            if "1200" in data.hex()[0:4] and b"/5" in data:
+            if "1200" in data.hex()[0:4] and b"/5s" in data:
                 json_result = get_available_room(data.hex()[10:])
                 parsed_data = json.loads(json_result)
                 sender_id = parsed_data["5"]["data"]["1"]["data"]
                 sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-            )
-        )
-                else:
+                if True:
                     packetmaker = self.skwad_maker()
                     socket_client.send(packetmaker)             
                     sleep(1)
@@ -1428,22 +1501,71 @@ class FF_CLIENT(threading.Thread):
     	                clients.send(
     	                    self.GenResponsMsg(
     	                        f"""
-[b][FF0000] -----------------------------------
-
-[66ff0d] (+) تــم انشــاء الــسكواد بـنــجاح
-
-[0dd3ff]    أقـــبل الطـلـب بســرعـة !!
-
-[b][FF0000] -----------------------------------
+    [11EAFD][b][c]
+    °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    إقبل طلب بسرعة!!!
+    
+    °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    [FFB300][b][c]BOT MADE BY ZIX OFFICIAL 
     	                        """
     	                    )
     	                )
                     sleep(5)
                     leavee = self.leave_s()
-                    socket_client.send(leavee) 
+                    socket_client.send(leavee)       	                
+                # التأكد من المغادرة بعد 5 ثوانٍ إذا لم تتم المغادرة تلقائيًا
+                sleep(5)
+                print("Checking if still in squad...")
+
+                leavee = self.leave_s()
+                socket_client.send(leavee)
+
+                 # تأخير أطول للتأكد من تنفيذ المغادرة قبل تغيير الوضع
+                sleep(5)
+
+                 # إرسال أمر تغيير وضع اللعبة إلى Solo
+                change_to_solo = self.changes(1)  # تأكد أن `1` هو القيمة الصحيحة لـ Solo
+                socket_client.send(change_to_solo)
+
+                 # تأخير بسيط قبل إرسال التأكيد للمستخدم
+                sleep(2)
+
+                clients.send(
+                     self.GenResponsMsg(
+                         f"[C][B] [FF00FF]Successfully left squad! Now in Solo mode.", uid
+                     )
+                 ) 
+
+            if "1200" in data.hex()[0:4] and b"/6s" in data:
+                json_result = get_available_room(data.hex()[10:])
+                parsed_data = json.loads(json_result)
+                sender_id = parsed_data["5"]["data"]["1"]["data"]
+                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
+                if True:
+                    packetmaker = self.skwad_maker()
+                    socket_client.send(packetmaker)             
+                    sleep(1)
+                    packetfinal = self.changes(5)
+                    iddd=parsed_data["5"]["data"]["1"]["data"]
+                    socket_client.send(packetfinal)
+                    invitess = self.invite_skwad(iddd)
+                    socket_client.send(invitess)
+                    if iddd:
+    	                clients.send(
+    	                    self.GenResponsMsg(
+    	                        f"""
+    [11EAFD][b][c]
+    °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    إقبل طلب بسرعة!!!
+    
+    °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    [FFB300][b][c]BOT MADE BY ZIX OFFICIAL TEAM
+    	                        """
+    	                    )
+    	                )                    	                                    	                
 ####################################
             # GET PLAYER COMMAND
-            if "1200" in data.hex()[0:4] and b"/inv" in data:
+            if "1200" in data.hex()[0:4] and b"/inv " in data:
                 try:
                      
                     raw_message = data.decode('utf-8', errors='ignore')
@@ -1455,7 +1577,7 @@ class FF_CLIENT(threading.Thread):
                     
                     try:
                         import re
-                        # البحث عن نمط /inv متبوعًا بأرقام
+                        # البحث عن نمط /inv/ متبوعًا بأرقام
                         id_match = re.search(r'/inv (\d{5,15})\b', cleaned_message)
                         
                         if id_match:
@@ -1465,7 +1587,7 @@ class FF_CLIENT(threading.Thread):
                                 iddd = default_id
                         else:
                              
-                            temp_id = cleaned_message.split('/inv')[1].split()[0].strip()
+                            temp_id = cleaned_message.split('/inv/')[1].split()[0].strip()
                             iddd = temp_id if temp_id.isdigit() and len(temp_id) >= 5 else default_id
                         
                         # معالجة الرموز الخاصة
@@ -1480,13 +1602,7 @@ class FF_CLIENT(threading.Thread):
                     parsed_data = json.loads(json_result)
                     sender_id = parsed_data["5"]["data"]["1"]["data"]
                     sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                    if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-            )
-        )
-                    else:
+                    if True:
                         uid = parsed_data["5"]["data"]["1"]["data"]
                         numsc = 5
                         packetmaker = self.skwad_maker()
@@ -1500,13 +1616,11 @@ class FF_CLIENT(threading.Thread):
                         socket_client.send(invitessa)
                         
                         clients.send(self.GenResponsMsg(f"""
-[b][FF0000] -----------------------------------
-
-[66ff0d] (+) جاري جلب الاعب
-
-[0dd3ff]    أقـــبل الطـلـب بســرعـة !!
-
-[b][FF0000] -----------------------------------
+                [11EAFD][b][c]
+                °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                إقبل طلب بسرعة!!!
+                °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                [FFB300][b][c]BOT MADE BY ZIX OFFICIAL
                 """))
                         
                         sleep(9)
@@ -1525,7 +1639,7 @@ class FF_CLIENT(threading.Thread):
                         restart_program()
 
             # SPAM JOIN SKWAD COMMAND
-            if "1200" in data.hex()[0:4] and b"/sm" in data:
+            if "1200" in data.hex()[0:4] and b"/sm " in data:
                 try:                
                     raw_message = data.decode('utf-8', errors='ignore')
                     cleaned_message = raw_message.replace('\x00', '').strip()
@@ -1543,7 +1657,7 @@ class FF_CLIENT(threading.Thread):
                                 iddd = default_id
                         else:
                             
-                            temp_id = cleaned_message.split('/sm')[1].split()[0].strip()
+                            temp_id = cleaned_message.split('/sm ')[1].split()[0].strip()
                             iddd = int(temp_id) if temp_id.isdigit() and len(temp_id) >= 5 else default_id
                             
                     except Exception as e:
@@ -1552,13 +1666,7 @@ class FF_CLIENT(threading.Thread):
                     json_result = get_available_room(data.hex()[10:])
                     sender_id = parsed_data["5"]["data"]["1"]["data"]
                     sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                    if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-            )
-        )
-                    else:
+                    if True:
                         invskwad = self.request_skwad(iddd)
                         socket_client.send(invskwad)
                         parsed_data = json.loads(json_result)
@@ -1568,13 +1676,13 @@ class FF_CLIENT(threading.Thread):
                         uid = parsed_data["5"]["data"]["1"]["data"]
                         iddd_display = fix_num(iddd)
                         clients.send(self.GenResponsMsg(f"""
-[de0732][b][c]
-----------------------------------
-تم بدأ السبام طلبات إنضمام للاعب:
-{iddd_display}
-----------------------------------
-[FFB300][b][c]ＢＬＲＸᅠ TEAM
-"""))
+                [11EAFD][b][c]
+                °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                تم بدأ السبام طلبات إنضمام للاعب:
+                {iddd_display}
+                °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                [FFB300][b][c]BOT MADE BY ZIX OFFICIAL 
+                """))
                         
                         sleep(5)
                         leavee = self.leave_s()
@@ -1584,14 +1692,14 @@ class FF_CLIENT(threading.Thread):
                     print(f"Spam Command Error: {e}")
                     restart_program()
             # PLAYER STATUS COMMAND
-            if "1200" in data.hex()[0:4] and b"/status" in data:
+            if "1200" in data.hex()[0:4] and b"/status " in data:
                 try:
                     
                     raw_message = data.decode('utf-8', errors='ignore')
                     cleaned_message = raw_message.replace('\x00', '').strip()
                     
                     
-                    default_id = "11495762622"
+                    default_id = "10414593349"
                     player_id = default_id
                     
                     try:
@@ -1606,7 +1714,7 @@ class FF_CLIENT(threading.Thread):
                                 player_id = default_id
                         else:
                             
-                            temp_id = cleaned_message.split('/status')[1].split()[0].strip()
+                            temp_id = cleaned_message.split('/status ')[1].split()[0].strip()
                            
                             temp_id = temp_id.replace("***", "106") if "***" in temp_id else temp_id
                             player_id = temp_id if temp_id.isdigit() and len(temp_id) >= 5 else default_id
@@ -1621,13 +1729,7 @@ class FF_CLIENT(threading.Thread):
                     uid = parsed_data["5"]["data"]["1"]["data"]
                     sender_id = parsed_data["5"]["data"]["1"]["data"]
                     sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                    if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [ＢＬＲＸ] in their name can use this command."
-            )
-        )
-                    else:
+                    if True:
                         packetmaker = self.createpacketinfo(player_id)
                         socket_client.send(packetmaker)
                         sleep(1)                
@@ -1649,7 +1751,7 @@ class FF_CLIENT(threading.Thread):
 
 ####################################
             #CHECK ID ->> COMMAND
-            if "1200" in data.hex()[0:4] and b"/check" in data:
+            if "1200" in data.hex()[0:4] and b"/check " in data:
                 try:
                     raw_message = data.decode('utf-8', errors='ignore')
                     cleaned_message = raw_message.replace('\x00', '').strip()
@@ -1657,7 +1759,7 @@ class FF_CLIENT(threading.Thread):
                     import re
                     id_match = re.search(r'/check (\d{5,15})\b', cleaned_message)                    
                     if not id_match:
-                        id_match = re.search(r'/check([0-9]+)', cleaned_message)                    
+                        id_match = re.search(r'/check ([0-9]+)', cleaned_message)                    
                     if id_match:
                         player_id = id_match.group(1)
                         print(f"Extracted Player ID: {player_id}")
@@ -1670,26 +1772,20 @@ class FF_CLIENT(threading.Thread):
                     uid = parsed_data["5"]["data"]["1"]["data"]
                     sender_id = parsed_data["5"]["data"]["1"]["data"]
                     sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                    if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-            )
-        )
-                    else:
+                    if True:
                         clients.send(self.GenResponsMsg("Okay Sir, Please Wait.."))
                         banned_status = check_banned_status(player_id)
                         player_id = fix_num(player_id)
                         status = banned_status['status']
                         response_message = f"""
-[de0732][b][c]
-----------------------------------
-Player Name: {banned_status['player_name']}
-Player ID : {player_id}
-Status: {status}
-----------------------------------
-[FFB300][b][c]ＢＬＲＸᅠ TEAM
-"""
+                [11EAFD][b][c]
+                °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                Player Name: {banned_status['player_name']}
+                Player ID : {player_id}
+                Status: {status}
+                °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                [FFB300][b][c]BOT
+                """
                         clients.send(self.GenResponsMsg(response_message))
                 except Exception as e:
                     print(f"\nProcessing Error: {e}\n")
@@ -1704,7 +1800,7 @@ Status: {status}
                         restart_program()
 ####################################
             #GET ID REGION ->> COMMAND
-            if "1200" in data.hex()[0:4] and b"/region" in data:
+            if "1200" in data.hex()[0:4] and b"/region " in data:
                 try:
                      
                     raw_message = data.decode('utf-8', errors='ignore')
@@ -1717,7 +1813,7 @@ Status: {status}
                     
                     if not id_match:
                         # محاولة بديلة إذا فشلت الأولى
-                        id_match = re.search(r'/region(\d+)', cleaned_message)
+                        id_match = re.search(r'/region (\d+)', cleaned_message)
                     
                     if id_match:
                         player_id = id_match.group(1)
@@ -1735,25 +1831,14 @@ Status: {status}
                     uid = parsed_data["5"]["data"]["1"]["data"]
                     sender_id = parsed_data["5"]["data"]["1"]["data"]
                     sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                    if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-            )
-        )
-                    else:
+                    if True:
                         clients.send(self.GenResponsMsg("جاري المعالجة..."))
                         
                         b = get_player_info(player_id)
                         player_id = fix_num(player_id)
                         response_message = f"""
-[de0732][b][c]
-----------------------------------
-Player Name : {b.get('Name', 'N/A')}
-Player ID : {player_id}
-Player Region : {b.get('Account Region', 'N/A')}
-----------------------------------
-[FFB300][b][c]ＢＬＲＸᅠ TEAM"""
+                [11EAFD][b][c]تم إرسال طلب الصد
+                """
                         clients.send(self.GenResponsMsg(response_message))
             
                 except Exception as e:
@@ -1767,72 +1852,7 @@ Player Region : {b.get('Account Region', 'N/A')}
                     except Exception as inner_e:
                         print(f"\nCritical Error: {inner_e}\n")
                         restart_program()
-###################################
-            if "1200" in data.hex()[0:4] and b"/spm" in data:
-                try:
-                     
-                    raw_message = data.decode('utf-8', errors='ignore')
-                    cleaned_message = raw_message.replace('\x00', '').strip()
-                    default_id = "10414593349"
-                    player_id = default_id  # القيمة الافتراضية
-                    
-                    try:
-                        import re
-                        # المحاولة الأولى: البحث عن نمط /spm متبوعًا بأرقام
-                        id_match = re.search(r'/spm (\d{5,15})\b', cleaned_message)
-                        
-                        if id_match:
-                            player_id = id_match.group(1)
-                            print(f"Extracted Player ID: {player_id}")
-                            
-                            # التحقق من صحة الآيدي
-                            if not (5 <= len(player_id) <= 15) or not player_id.isdigit():
-                                print("Invalid ID format, using default")
-                                player_id = default_id
-                        else:
-                            # المحاولة الثانية: طريقة بديلة إذا فشلت الأولى
-                            parts = cleaned_message.split('/spm')
-                            if len(parts) > 1:
-                                temp_id = parts[1].split()[0].strip()
-                                if temp_id.isdigit() and 5 <= len(temp_id) <= 15:
-                                    player_id = temp_id
-                                else:
-                                    print("Invalid ID in fallback method, using default")
-                                    player_id = default_id
-                            else:
-                                print("No ID found, using default")
-                                player_id = default_id
-                                
-                    except Exception as extract_error:
-                        print(f"ID extraction error: {extract_error}, using default")
-                        player_id = default_id
-            
-                    # المتابعة مع باقي العمليات
-                    json_result = get_available_room(data.hex()[10:])
-                    parsed_data = json.loads(json_result)
-                    uid = parsed_data["5"]["data"]["1"]["data"]
-                    sender_id = parsed_data["5"]["data"]["1"]["data"]
-                    sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                    if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-            )
-        )
-                    else:
-                        clients.send(self.GenResponsMsg("جاري المعالجة..."))
-                        
-                        b = spam_requests(player_id)
-                        player_id = fix_num(player_id)
-                        response_message = f"""
-[de0732][b][c]
-----------------------------------
-Status : {fix_num(b)}
-Player ID : {player_id}
-----------------------------------
-[FFB300][b][c]ＢＬＲＸᅠ TEAM
-"""
-                        clients.send(self.GenResponsMsg(response_message))
+
             
                 except Exception as e:
                     print(f"\nProcessing Error: {e}\n")
@@ -1844,86 +1864,14 @@ Player ID : {player_id}
                         clients.send(self.GenResponsMsg(error_msg))
                     except:
                         restart_program()
-#######################################                       
-####################################
-            if "1200" in data.hex()[0:4] and b"/add" in data:
-                try:
-                     
-                    raw_message = data.decode('utf-8', errors='ignore')
-                    cleaned_message = raw_message.replace('\x00', '').strip()
-                    default_id = "10414593349"
-                    player_id = default_id  # القيمة الافتراضية
-                    
-                    try:
-                        import re
-                        # المحاولة الأولى: البحث عن نمط /spm متبوعًا بأرقام
-                        id_match = re.search(r'/add (\d{5,15})\b', cleaned_message)
-                        
-                        if id_match:
-                            player_id = id_match.group(1)
-                            print(f"Extracted Player ID: {player_id}")
-                            
-                            # التحقق من صحة الآيدي
-                            if not (5 <= len(player_id) <= 15) or not player_id.isdigit():
-                                print("Invalid ID format, using default")
-                                player_id = default_id
-                        else:
-                            # المحاولة الثانية: طريقة بديلة إذا فشلت الأولى
-                            parts = cleaned_message.split('/add')
-                            if len(parts) > 1:
-                                temp_id = parts[1].split()[0].strip()
-                                if temp_id.isdigit() and 5 <= len(temp_id) <= 15:
-                                    player_id = temp_id
-                                else:
-                                    print("Invalid ID in fallback method, using default")
-                                    player_id = default_id
-                            else:
-                                print("No ID found, using default")
-                                player_id = default_id
-                                
-                    except Exception as extract_error:
-                        print(f"ID extraction error: {extract_error}, using default")
-                        player_id = default_id
-            
-                    # المتابعة مع باقي العمليات
-                    json_result = get_available_room(data.hex()[10:])
-                    parsed_data = json.loads(json_result)
-                    uid = parsed_data["5"]["data"]["1"]["data"]
-                    sender_id = parsed_data["5"]["data"]["1"]["data"]
-                    sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                    if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-            )
-        )
-                    else:
-                        clients.send(self.GenResponsMsg("جاري المعالجة..."))
-                        
-                        b = spam_requests(player_id)
-                        player_id = fix_num(player_id)
-                        response_message = f"""
-[de0732][b][c]
-----------------------------------
-تم ارسال طلب صداقة الى
-{player_id}
-----------------------------------
-[FFB300][b][c]ＢＬＲＸᅠ TEAM
-"""
-                        clients.send(self.GenResponsMsg(response_message))
-            
-                except Exception as e:
-                    print(f"\nProcessing Error: {e}\n")
-                    try:
-                        json_result = get_available_room(data.hex()[10:])
-                        parsed_data = json.loads(json_result)
-                        uid = parsed_data["5"]["data"]["1"]["data"]
-                        error_msg = f"[FF0000]Error: {str(e)}"
-                        clients.send(self.GenResponsMsg(error_msg))
-                    except:
-                        restart_program()
-#############################################                      
             # AI COMMAND
+
+            
+                                    
+
+                                  
+
+            
             if "1200" in data.hex()[0:4] and b"/ai" in data:
                 try:
                     json_result = get_available_room(data.hex()[10:])
@@ -1931,13 +1879,7 @@ Player ID : {player_id}
                     uid = parsed_data["5"]["data"]["1"]["data"]
                     sender_id = parsed_data["5"]["data"]["1"]["data"]
                     sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                    if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-            )
-        )
-                    else:
+                    if True:
                         clients.send(self.GenResponsMsg("جاري جلب الإتصال بذكاء..."))
                         
                         # استخراج السؤال بطريقة أكثر قوة
@@ -1969,14 +1911,14 @@ Player ID : {player_id}
                     restart_program()
 
             # CLAN INFO COMMAND
-            if "1200" in data.hex()[0:4] and b"/clan" in data:
+            if "1200" in data.hex()[0:4] and b"/clan " in data:
                 try:
                      
                     raw_message = data.decode('utf-8', errors='ignore')
                     cleaned_message = raw_message.replace('\x00', '').strip()
                     
                     # استخراج Clan ID بنظام متقدم
-                    default_clan_id = "3074343994"
+                    default_clan_id = "3080179038"
                     clan_id = default_clan_id  # القيمة الافتراضية
                     
                     try:
@@ -1994,7 +1936,7 @@ Player ID : {player_id}
                                 clan_id = default_clan_id
                         else:
                             # المحاولة الثانية: طريقة بديلة إذا فشلت الأولى
-                            parts = cleaned_message.split('/clan')
+                            parts = cleaned_message.split('/clan ')
                             if len(parts) > 1:
                                 temp_id = parts[1].split()[0].strip()
                                 if temp_id.isdigit() and 5 <= len(temp_id) <= 15:
@@ -2016,13 +1958,7 @@ Player ID : {player_id}
                     uid = parsed_data["5"]["data"]["1"]["data"]
                     sender_id = parsed_data["5"]["data"]["1"]["data"]
                     sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                    if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-            )
-        )
-                    else:
+                    if True:
                         clients.send(self.GenResponsMsg("جاري جلب معلومات كلان..."))
                         
                         clan_info = Get_clan_info(clan_id)
@@ -2040,23 +1976,17 @@ Player ID : {player_id}
                     except:
                         restart_program()
 ####################################
-            if "1200" in data.hex()[0:4] and b"/room" in data:
+            if "1200" in data.hex()[0:4] and b"/room " in data:
                 	import re
-                	i = re.split("/room", str(data))[1] 
+                	i = re.split("/room ", str(data))[1] 
                 	sid = str(i).split("(\\x")[0]
                 	json_result = get_available_room(data.hex()[10:])
                 	parsed_data = json.loads(json_result)
                 	sender_id = parsed_data["5"]["data"]["1"]["data"]
                 	sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                	if "" not in sender_name:
-                          clients.send(
-                 self.GenResponsMsg(
-                     f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-                 )
-             )
-                	else:
+                	if True:
                         	uid = parsed_data["5"]["data"]["1"]["data"]
-                        	split_data = re.split(rb'/room', data)
+                        	split_data = re.split(rb'/room ', data)
                         	room_data = split_data[1].split(b'(')[0].decode().strip().split()
                         	if room_data and len(room_data) > 0:
                             		player_id = room_data[0]
@@ -2112,21 +2042,15 @@ Player ID : {player_id}
                                 )
                             )                          
 ####################################
-            if "1200" in data.hex()[0:4] and b"/info" in data:
+            if "1200" in data.hex()[0:4] and b"/info " in data:
                   import re
-                  command_split = re.split("/info", str(data))
+                  command_split = re.split("/info ", str(data))
                   if len(command_split) > 1:
                       json_result = get_available_room(data.hex()[10:])
                       parsed_data = json.loads(json_result)
                       sender_id = parsed_data["5"]["data"]["1"]["data"]
                       sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                      if "" not in sender_name:
-                          clients.send(
-                 self.GenResponsMsg(
-                     f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-                 )
-             )
-                      else:
+                      if True:
                           uid = command_split[1].split("\\x")[0].strip()
                           uid = command_split[1].split('(')[0].strip()
                           info_response = newinfo(uid)
@@ -2213,7 +2137,7 @@ Player ID : {player_id}
 ####################################
             # GET 100 LIKES COMMAND
             import re
-            if "1200" in data.hex()[0:4] and b"/likes" in data:
+            if "1200" in data.hex()[0:4] and b"/likes " in data:
                 import re
                 try:
                      
@@ -2233,7 +2157,7 @@ Player ID : {player_id}
                             if not (5 <= len(player_id) <= 15) or not player_id.isdigit():
                                 player_id = default_id
                         else:                             
-                            temp_id = cleaned_message.split('/likes')[1].split()[0].strip()
+                            temp_id = cleaned_message.split('/likes ')[1].split()[0].strip()
                             player_id = temp_id if temp_id.isdigit() and len(temp_id) >= 5 else default_id
                             
                     except Exception as e:
@@ -2244,13 +2168,7 @@ Player ID : {player_id}
                     uid = parsed_data["5"]["data"]["1"]["data"]
                     sender_id = parsed_data["5"]["data"]["1"]["data"]
                     sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-                    if "" not in sender_name:
-	                    clients.send(
-            self.GenResponsMsg(
-                f"[C][B][FF0000]Access Denied!\n[ffffff]Only users with [] in their name can use this command."
-            )
-        )
-                    else:
+                    if True:
 	                    clients.send(self.GenResponsMsg("جاري إرسال الإعجابات..."))                    
 	                    likes_info = send_likes(player_id)
 	                    player_id = fix_num(player_id)
@@ -2266,117 +2184,97 @@ Player ID : {player_id}
                     except:
                         restart_program()
 
-##########            
-            if "1200" in data.hex()[0:4] and b"/help" in data: 
+#################################
+            if "1200" in data.hex()[0:4] and b"/info" in data: 
 	                json_result = get_available_room(data.hex()[10:])
 	                parsed_data = json.loads(json_result)
 	                uid = parsed_data["5"]["data"]["1"]["data"]
 	                sender_id = parsed_data["5"]["data"]["1"]["data"]
 	                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-	                response_message = f"""[FF0000]مرحبا بك يا : {sender_name}
-[EF98E0]--------------------------------[b][ffffff]
-فتح فريق لصديقك استعمل:
-[0dd3ff]/🗿snd 123[c]456[c]78[c]9
-[b][ffffff]
+	                response_message = f"""[b][c][FF000F]♥
+[FF0000َ]يتم البحث عن معلومات الحساب يرجى الإنتضار """
 
-تحويل الفريق الى 3 استعمل:
-[0dd3ff]/🗿3
-[b][ffffff]
-
-تحويل الفريق الى 4 استعمل:
-[0dd3ff]/🗿4
-[b][ffffff]
-
-تحويل الفريق الى 5 استعمل:
-[0dd3ff]/🗿5
-[b][ffffff]
-[EF98E0]--------------------------------"""
-	                clients.send(self.GenResponsMsg(response_message))
-            
-
-
-          
-            if "1200" in data.hex()[0:4] and b"/help" in data: 
+            if "1200" in data.hex()[0:4] and b"/DEV" in data: 
 	                json_result = get_available_room(data.hex()[10:])
 	                parsed_data = json.loads(json_result)
 	                uid = parsed_data["5"]["data"]["1"]["data"]
 	                sender_id = parsed_data["5"]["data"]["1"]["data"]
 	                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-	                response_message = f"""[EF98E0]--------------------------------[b][ffffff]
-جلب لاعب الى الفريق استعمل:
-[0dd3ff]/🗿inv123[c]456[c]78[c]9
-[b][ffffff]
+	                response_message = f"""[C][B]
+مرحبٱ بكم في  [00ff00] كلان [FF0000]
+  [ffffff]ㅤ ZIX TEAM
 
-سبام طلبات بإسم البوت:
-[0dd3ff]/🗿sm 123[c]456[c]78[c]9
-[b][ffffff]
+المطوربن 
 
-حالة السيرفر استعمل:
-[0dd3ff]/🗿status
-[b][ffffff]
+ZIX OFFICIAL
 
-تحقق من البند استعمل:
-[0dd3ff]/🗿check
-[b][ffffff]
-[EF98E0]--------------------------------"""
+[B][C][FF0000] الرجاء جمع 1500 قلوري في اليوم الواحد او سيتم طردك و يتم توقيف البوت لديك . 
+
+[C][B]
+مرحبٱ بك في كلان
+ZIX  T E A M
+
+
+
+لمعرفة الاوامر ارسل 
+/َhelp
+
+░█░█ㅤㅤㅤㅤㅤ
+صانعين البوت
+
+@XiZYELFI 
+@XiZYELFI """
 	                clients.send(self.GenResponsMsg(response_message))
 	                
-	                	                
-            if "1200" in data.hex()[0:4] and b"/help" in data: 
+            if "1200" in data.hex()[0:4] and b"/FM" in data: 
 	                json_result = get_available_room(data.hex()[10:])
 	                parsed_data = json.loads(json_result)
 	                uid = parsed_data["5"]["data"]["1"]["data"]
 	                sender_id = parsed_data["5"]["data"]["1"]["data"]
 	                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-	                response_message = f"""[EF98E0]--------------------------------[b][ffffff]
-معرفة السيرفر استعمل:
-[0dd3ff]/🗿region
-[b][ffffff]
+	                response_message = f"""[b][c][FF000F]أدخل للقائمة المهتم بها واجعلها ضمن قائمتك
 
-سبام طلبات صداقة استعمل:
-[0dd3ff]/🗿spm
-[b][ffffff]
 
-معلومات المطور استعمل:
-[0dd3ff]/🗿def
-[b][ffffff]
-
-رسائل الكلان استعمل:
-[0dd3ff]/🗿clan
-[b][ffffff]
-[EF98E0]--------------------------------"""
-	                clients.send(self.GenResponsMsg(response_message))	     
-##########            
-            if "1200" in data.hex()[0:4] and b"/help" in data: 
+[FF0000َ]اسلحة   7319✨471756
+[C][B] [C][FF0000]--------------------------------
+[FFFF00]فخمة   96919✨89441
+[C][B] [FF0000]--------------------------------
+[00FFFFَ]نادرة    9719✨822328
+[C][B] [FF0000]--------------------------------
+[FF00FFَ]رقصات 658✨8980942
+[C][B] [FF0000]--------------------------------"""
+	                clients.send(self.GenResponsMsg(response_message))
+	                
+            if "1200" in data.hex()[0:4] and b"/MAC" in data: 
 	                json_result = get_available_room(data.hex()[10:])
 	                parsed_data = json.loads(json_result)
 	                uid = parsed_data["5"]["data"]["1"]["data"]
 	                sender_id = parsed_data["5"]["data"]["1"]["data"]
 	                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
-	                response_message = f"""[EF98E0]--------------------------------[b][ffffff]
-إضافة للروم استعمل:
-[0dd3ff]/🗿room 123[c]456[c]78[c]9
-[b][ffffff]
+	                response_message = f"""[b][c][FF000F]المايك غير [ff3728] مبند"""
+	                clients.send(self.GenResponsMsg(response_message))
+	                
+            if "1200" in data.hex()[0:4] and b"/HED" in data: 
+	                json_result = get_available_room(data.hex()[10:])
+	                parsed_data = json.loads(json_result)
+	                uid = parsed_data["5"]["data"]["1"]["data"]
+	                sender_id = parsed_data["5"]["data"]["1"]["data"]
+	                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
+	                response_message = f"""[b][c][FF000F] نزل الايم لتحت و بعدين ارفعه
+                        
+ [C][B] [C][FF38E0]--------------------------------
+ عندما تلعب بثلج ارفع الايم فوق بدون تنزيل
+ [C][B] [C][FF00FF]--------------------------------
+ عندما يركض الاعب في اتجاه معين ارفع الايم لليسار 
+ [C][B] [C][F0000F]--------------------------------
+ ارفع الdpi لل 800
+ [C][B] [C][FF068E]--------------------------------
+ ابحث عن قوقل عن برنامج موكرو
+ [C][B] [C][FF0000]--------------------------------
+ استخدم قفز لليد"""
+	                clients.send(self.GenResponsMsg(response_message))
 
-معلومات اللاعب استعمل:
-[0dd3ff]/🗿info
-[b][ffffff]
-
-زيادة لايكات استعمل:
-[0dd3ff]/🗿likes
-[b][ffffff]
-
-تحقق من الماك استعمل:
-[0dd3ff]/🗿MAC
-[b][ffffff]
-
-سبار رسائل في الكلان استعمل:
-[0dd3ff]/🗿ishak
-[b][ffffff]
-[EF98E0]--------------------------------"""
-	                clients.send(self.GenResponsMsg(response_message))	     
-#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━	                
-            if "1200" in data.hex()[0:4] and b"/dev" in data: 
+            if "1200" in data.hex()[0:4] and b"/DEV" in data: 
 	                json_result = get_available_room(data.hex()[10:])
 	                parsed_data = json.loads(json_result)
 	                uid = parsed_data["5"]["data"]["1"]["data"]
@@ -2390,705 +2288,1470 @@ Player ID : {player_id}
 [00FFFFَ] لحل اي مشكلة لديك تواصل معنا
 [C][B] [FF0000]
 
-[C][B] [FF0000]@ishak_ishak.26"""
-#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━        	                	                
-            if "1200" in data.hex()[0:4] and b"/ishak" in data: 
+[C][B] [FF0000]@zix official"""
+	                clients.send(self.GenResponsMsg(response_message))                                    
+            if "1200" in data.hex()[0:4] and b"/help" in data: 
+	                json_result = get_available_room(data.hex()[10:])
+	                parsed_data = json.loads(json_result)
+	                uid = parsed_data["5"]["data"]["1"]["data"]
+	                sender_id = parsed_data["5"]["data"]["1"]["data"]
+	                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
+	                response_message = f"""[C][B] بانل بوت صديق
+	                
+                                
+[FFD799] إرسال البوت للاعب
+	
+[FF6347] /َadd <id>
+	
+[FF0000]--------------------------------
+	
+[FFD799] حذف البوت من الاعب  
+	
+[FF6347] /َremove <id>
+
+[FF0000]--------------------------------
+	
+[FFD799] عرض جميع الاعبين الذين لديهم البوت
+	
+[FF6347] /َfreind <id>
+	
+[FF0000]--------------------------------
+	
+[FFD799]  حذف البوت لدى الجميع
+	
+[FF6347] /َremoves
+
+[FF0000]--------------------------------
+
+[FFD799]  تكلم مع ذكاء الاصطناعي
+	
+[FF6347] /َai """
+	                clients.send(self.GenResponsMsg(response_message))
+            
+            if "1200" in data.hex()[0:4] and b"/help" in data: 
+	                json_result = get_available_room(data.hex()[10:])
+	                parsed_data = json.loads(json_result)
+	                uid = parsed_data["5"]["data"]["1"]["data"]
+	                sender_id = parsed_data["5"]["data"]["1"]["data"]
+	                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
+	                response_message = f"""[C][B]
+                                
+[FFD799] معلومات الاعب  
+	
+[FF6347] /َinfo <id>
+	
+[FF0000]--------------------------------
+	
+[FFD799] زيادة لايكات   
+	
+[FF6347] /َlikes <id>
+
+[FF0000]--------------------------------
+	
+[FFD799] تحقق من بند  الحسابات
+	
+[FF6347] /َcheck <id>
+
+[FF0000]--------------------------------
+
+[FFD799]معرفة السيرفر الخاص باللاعب:
+[1E90FF]/َregion <id>
+
+[FF0000]--------------------------------
+
+[FFD799] تحقق مايك مبند
+[00FF00]/َMAC <id>
+
+[FF0000]--------------------------------
+
+[FFD799] تقوية الحساسية
+[FB9200]/ََHED
+				
+"""
+	                clients.send(self.GenResponsMsg(response_message))
+            
+
+
+          
+            if "1200" in data.hex()[0:4] and b"/help" in data: 
+	                json_result = get_available_room(data.hex()[10:])
+	                parsed_data = json.loads(json_result)
+	                uid = parsed_data["5"]["data"]["1"]["data"]
+	                sender_id = parsed_data["5"]["data"]["1"]["data"]
+	                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
+	                response_message = f"""[C][B][FFD799] وضع البوت سولو
+[FF02FE] /َsolo <id>                        
+
+[EF98E0]--------------------------------
+
+[FFD799] إضافة لاعب لمقبرة الروم
+[FF02FE] /َroom <id>
+
+[EF98E0]--------------------------------
+
+[FFD799] إضافة لاعب لمقبرة سكواد
+[FF02FE]/َspam <id>
+
+[EF98E0]--------------------------------
+
+[FFD799]إضافة لاعب لمقبرة تعليق سكواد
+[FF02FE]/َlag [team code] 1-2-3
+
+[EF98E0]--------------------------------
+
+[FFD799]تعليق سكواد + بدأ إجباري
+[FF02FE]/َGEM [team code]
+
+[EF98E0]--------------------------------
+
+[FFD799] رسائل الكلان
+[FF02FE]/َF4X"""
+	                clients.send(self.GenResponsMsg(response_message))
+	                
+	                	                
+            if "1200" in data.hex()[0:4] and b"/help" in data: 
+	                json_result = get_available_room(data.hex()[10:])
+	                parsed_data = json.loads(json_result)
+	                uid = parsed_data["5"]["data"]["1"]["data"]
+	                sender_id = parsed_data["5"]["data"]["1"]["data"]
+	                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
+	                response_message = f"""[C][B][FFD799] بدأ إجباري 
+[FF02FE] /َstart <id>                        
+
+[EF98E0]--------------------------------
+
+[FFD799] لاغ مع بدأ
+[FF02FE] /َGEM <id>
+
+[EF98E0]--------------------------------
+
+[FFD799] إضافة لاعب لمقبرة سكواد
+[FF02FE]/َspam <id>
+
+[EF98E0]--------------------------------
+
+[FFD799]خمسة في السكواد 
+[FF02FE]/َ5
+
+[EF98E0]--------------------------------
+
+[FFD799]ستة في السكواد 
+[FF02FE]/َ6
+
+[EF98E0]--------------------------------
+
+[FFD799] اربعه في السكواد
+[FF02FE]/َ4"""
+	                clients.send(self.GenResponsMsg(response_message))	                	                	                	                
+            if "1200" in data.hex()[0:4] and b"/help" in data: 
+	                json_result = get_available_room(data.hex()[10:])
+	                parsed_data = json.loads(json_result)
+	                uid = parsed_data["5"]["data"]["1"]["data"]
+	                sender_id = parsed_data["5"]["data"]["1"]["data"]
+	                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
+	                response_message = f"""[C][B][FFD799] اعرف مين بسكواد صاحبك 
+[FF02FE] /َstaute <id>                        
+
+[EF98E0]--------------------------------
+
+[FFD799] عرض المطورين
+[FF02FE] /َDEV
+
+[EF98E0]--------------------------------
+
+[FFD799] سبام عادي
+[FF02FE]/َsm <id>
+
+[EF98E0]--------------------------------"""
+
+            if "1200" in data.hex()[0:4] and b"/lag" in data: 
+	                json_result = get_available_room(data.hex()[10:])
+	                parsed_data = json.loads(json_result)
+	                uid = parsed_data["5"]["data"]["1"]["data"]
+	                sender_id = parsed_data["5"]["data"]["1"]["data"]
+	                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
+	                response_message = f"""[C][B][FFD799]سيتم عمل مقبرة لاغ للسكواد """
+	                clients.send(self.GenResponsMsg(response_message))
+
+
+            if '1200' in data.hex()[0:4] and b'/lag' in data:
+                try:
+                    split_data = re.split(rb'/lag', data)
+                    command_parts = split_data[1].split(b'(')[0].decode().strip().split()
+
+                    if not command_parts:
+                        clients.send(self.GenResponsMsg("[C][B][FF0000]ضع تيم كود", uid))
+                        continue
+
+                    room_id = command_parts[0]
+                    repeat_count = 1
+
+                    if len(command_parts) > 1 and command_parts[1].isdigit():
+                        repeat_count = int(command_parts[1])
+
+                    if repeat_count > 3:
+                        repeat_count = 3
+                        
+                    json_result = get_available_room(data.hex()[10:])
+                    parsed_data = json.loads(json_result)
+                    uid = parsed_data['5']['data']['1']['data']
+                    
+                    if self.lag_thread and self.lag_thread.is_alive():
+                        self.lag_thread.stop()
+                        self.lag_thread.join()
+                        
+                    self.lag_thread = LagThread(socket_client, room_id, repeat_count, self.key, self.iv, uid)
+                    self.lag_thread.start()
+                    
+                    clients.send(
+                        self.GenResponsMsg(f"[C][B][FF8485]يتم عمل لاغ للاعب بقوة {repeat_count}", uid)
+                    )
+                    
+                except Exception as e:
+                    print(f"ضع امر /lag و بعده الايدي و بعده القوة {e}")
+                    pass
+            if "1200" in data.hex()[0:4] and b"/solo" in data:
+                json_result = get_available_room(data.hex()[10:])
+                parsed_data = json.loads(json_result)
+                uid = parsed_data["5"]["data"]["1"]["data"]
+
+                leavee = self.leave_s()
+                socket_client.send(leavee)
+
+                sleep(0)
+
+                change_to_solo = self.changes(0)
+                socket_client.send(change_to_solo)
+
+                clients.send(
+                    self.GenResponsMsg(
+                        f"[C][B][00FF00] تم الخروج من المجموعة.", uid
+                    )
+                )
+            if '1200' in data.hex()[0:4] and b'/GEM' in data:
+                try:
+                    split_data = re.split(rb'/GEM', data)
+                    command_parts = split_data[1].split(b'(')[0].decode().strip().split()
+
+                    json_result = get_available_room(data.hex()[10:])
+                    parsed_data = json.loads(json_result)
+                    uid = parsed_data['5']['data']['1']['data']
+
+                    if not command_parts:
+                        clients.send(self.GenResponsMsg("[C][B][FF0000]الرجاء إدخال كود الفريق. مثال:\n/GEM [TeamCode]", uid))
+                        continue
+
+                    team_code = command_parts[0]
+                    
+                    clients.send(
+                        self.GenResponsMsg(f"[C][B][FFA500]بدء هجوم مزدوج ومكثف على الفريق كاملاً{team_code}...", uid)
+                    )
+
+                    start_packet = self.start_autooo()
+                    leave_packet = self.leave_s()
+
+                    attack_start_time = time.time()
+                    while time.time() - attack_start_time < 45:
+                        join_teamcode(socket_client, team_code, self.key, self.iv)
+                        socket_client.send(start_packet)
+                        socket_client.send(leave_packet)
+                        time.sleep(0)
+
+                    clients.send(
+                        self.GenResponsMsg(f"[C][B][00FF00]اكتمل الهجوم المزدوج على الفريق {team_code}!", uid)
+                    )
+
+                except Exception as e:
+                    print(f"حدث خطأ في الامر : {e}")
+                    try:
+                        clients.send(self.GenResponsMsg("[C][B][FF0000]حدث خطأ أثناء لاغ و بدأ اجباري للفريق", uid))
+                    except:
+                        pass     
+                
+            if "1200" in data.hex()[0:4] and b"/start" in data:
+                try:
+                    split_data = re.split(rb'/start', data)
+                    command_parts = split_data[1].split(b'(')[0].decode().strip().split()
+
+                    if not command_parts:
+                        clients.send(self.GenResponsMsg("[C][B][FF0000]ضع التيم كود", uid))
+                        continue
+
+                    team_code = command_parts[0]
+                    spam_count = 20
+
+                    if len(command_parts) > 1 and command_parts[1].isdigit():
+                        spam_count = int(command_parts[1])
+                    
+                    if spam_count > 50:
+                        spam_count = 50
+
+                    json_result = get_available_room(data.hex()[10:])
+                    parsed_data = json.loads(json_result)
+                    uid = parsed_data['5']['data']['1']['data']
+
+                    clients.send(
+                        self.GenResponsMsg(f"[C][B][FFA500]يتم البدأ إجباري...", uid)
+                    )
+
+                    join_teamcode(socket_client, team_code, self.key, self.iv)
+                    time.sleep(0)
+
+                    clients.send(
+                        self.GenResponsMsg(f"[C][B][FF0000]يتم عمل سبام في وقت {spam_count} times!", uid)
+                    )
+
+                    start_packet = self.start_autooo()
+                    for _ in range(spam_count):
+                        socket_client.send(start_packet)
+                        time.sleep(0)
+
+                    leave_packet = self.leave_s()
+                    socket_client.send(leave_packet)
+
+                    clients.send(
+                        self.GenResponsMsg(f"[C][B][00FF00]سيتم البدأ", uid)
+                    )
+
+                except Exception as e:
+                    print(f"حدث خطأ في امر /start {e}")
+                    pass   
+            if "1200" in data.hex()[0:4] and b"/rank" in data:
+                try:
+                    split_data = re.split(rb'/rank', data)
+                    command_parts = split_data[1].split(b'(')[0].decode().strip().split()
+
+                    if not command_parts:
+                        clients.send(self.GenResponsMsg("[C][B][FF0000]ضع التيم كود", uid))
+                        continue
+
+                    team_code = command_parts[0]
+                    spam_count = 20
+
+                    if len(command_parts) > 1 and command_parts[1].isdigit():
+                        spam_count = int(command_parts[1])
+                    
+                    if spam_count > 50:
+                        spam_count = 50
+
+                    json_result = get_available_room(data.hex()[10:])
+                    parsed_data = json.loads(json_result)
+                    uid = parsed_data['5']['data']['1']['data']
+
+                    clients.send(
+                        self.GenResponsMsg(f"[C][B][FFA500]يتم البدأ الان...", uid)
+                    )
+
+                    join_teamcode(socket_client, team_code, self.key, self.iv)
+                    time.sleep(0)
+
+                    clients.send(
+                        self.GenResponsMsg(f"[C][B][FF0000]يتم الدخول {spam_count} times!", uid)
+                    )
+
+                    start_packet = self.start_autooo()
+                    for _ in range(spam_count):
+                        socket_client.send(start_packet)
+                        time.sleep(0)
+
+                    leave_packet = self.leave_s()
+                    socket_client.send(leave_packet)
+
+                    clients.send(
+                        self.GenResponsMsg(f"[C][B][00FF00]سيتم دخول بوتات", uid)
+                    )
+
+                except Exception as e:
+                    print(f"حدث خطأ في الامر {e}")
+            if "1200" in data.hex()[0:4] and b"/BMW" in data:
+                try:
+                    split_data = re.split(rb'/rank', data)
+                    command_parts = split_data[1].split(b'(')[0].decode().strip().split()
+
+                    if not command_parts:
+                        clients.send(self.GenResponsMsg("[C][B][FF0000]ضع التيم كود", uid))
+                        continue
+
+                    team_code = command_parts[0]
+                    spam_count = 20
+
+                    if len(command_parts) > 1 and command_parts[1].isdigit():
+                        spam_count = int(command_parts[1])
+                    
+                    if spam_count > 50:
+                        spam_count = 50
+
+                    json_result = get_available_room(data.hex()[10:])
+                    parsed_data = json.loads(json_result)
+                    uid = parsed_data['5']['data']['1']['data']
+
+                    clients.send(
+                        self.GenResponsMsg(f"[C][B][FFA500]يتم البدأ الان...", uid)
+                    )
+
+                    join_teamcode(socket_client, team_code, self.key, self.iv)
+                    time.sleep(11)
+
+                    clients.send(
+                        self.GenResponsMsg(f"[C][B][FF0000]يتم الدخول {spam_count} times!", uid)
+                    )
+
+                    start_packet = self.start_autooo()
+                    for _ in range(spam_count):
+                        socket_client.send(start_packet)
+                        time.sleep(0.1)
+
+                    leave_packet = self.leave_s()
+                    socket_client.send(leave_packet)
+
+                    clients.send(
+                        self.GenResponsMsg(f"[C][B][00FF00]سيتم دخول بوتات", uid)
+                    )
+
+                except Exception as e:
+                    print(f"حدث خطأ في الامر {e}")                    
+                    
+                    pass                       
+                    
+            if "1200" in data.hex()[0:4] and b"/add" in data:
+                i = re.split("/add", str(data))[1]
+                if "***" in i:
+                    i = i.replace("***", "106")
+                sid = str(i).split("(\\x")[0]
+                json_result = get_available_room(data.hex()[10:])
+                parsed_data = json.loads(json_result)
+                split_data = re.split(rb'/add', data)
+                room_data = split_data[1].split(b'(')[0].decode().strip().split()
+                if room_data:
+                    print(room_data)
+                    iddd = room_data[0]
+                    numsc1 = room_data[1] if len(room_data) > 1 else None
+
+                    if numsc1 is None:
+                        clients.send(
+                            self.GenResponsMsg(
+                                f"[C][B] [FF00FF]خطأ ، ضع امر /add و بعده الايدي و بعده رقم 5", uid
+                            )
+                        )
+                    else:
+                        numsc = int(numsc1) - 1
+                        uid = parsed_data["5"]["data"]["1"]["data"]
+                        if int(numsc1) < 3 or int(numsc1) > 6:
+                            clients.send(
+                                self.GenResponsMsg(
+                                    f"[C][B][FF0000] Usage : /add <uid> <Squad Type>\n[ffffff]Example : \n/ add 12345678 4\n/ add 12345678 5", uid
+                                )
+                            )
+                        else:
+                            packetmaker = self.skwad_maker()
+                            socket_client.send(packetmaker)
+                            sleep(1)
+                            packetfinal = self.changes(int(numsc))
+                            socket_client.send(packetfinal)
+                            
+                            invitess = self.invite_skwad(iddd)
+                            socket_client.send(invitess)
+                            iddd1 = parsed_data["5"]["data"]["1"]["data"]
+                            invitessa = self.invite_skwad(iddd1)
+                            socket_client.send(invitessa)
+                            clients.send(
+                                self.GenResponsMsg(
+                                    f"[C][B][00ff00]- AcCept The Invite QuickLy ! ", uid
+                                )
+                            )
+                            leaveee1 = True
+                            while leaveee1:
+                                if leaveee == True:
+                                    print("Leave")
+                                    leavee = self.leave_s()
+                                    sleep(5)
+                                    socket_client.send(leavee)   
+                                    leaveee = False
+                                    leaveee1 = False
+                                    clients.send(
+                                        self.GenResponsMsg(
+                                            f"[C][B] [FF00FF]succes !", uid
+                                        )
+                                    )    
+                                if pleaseaccept == True:
+                                    print("Leave")
+                                    leavee = self.leave_s()
+                                    socket_client.send(leavee)   
+                                    leaveee1 = False
+                                    pleaseaccept = False
+                                    clients.send(
+                                        self.GenResponsMsg(
+                                            f"[C][B] [FF00FF]Please accept the invite", uid
+                                        )
+                                    )   
+                else:
+                    clients.send(
+                        self.GenResponsMsg(
+                            f"[C][B] [FF00FF]Please write id and count of the group\n[ffffff]Example : \n/ inv 123[c]456[c]78 4\n/ inv 123[c]456[c]78 5", uid
+                        )
+                    ) 
+            if "1200" in data.hex()[0:4] and b"/spy" in data:
+                message = data.decode('utf-8', errors='ignore')
+                message_parts = message.split() 
+                roomid = None
+                roomcode = None
+                for part in message_parts:
+                    digits = ''.join(filter(str.isdigit, part))
+                    if digits:
+                        roomid = int(digits)
+                        break
+                roomcode_match = re.search(r'roomcode=(\w+)', message)
+                if roomcode_match:
+                    roomcode = roomcode_match.group(1) 
+                if roomid is not None and roomcode is not None:
+                    packetmaker = self.join_room_chanel(roomid, roomcode)
+                    socket_client.send(packetmaker)
+                else:
+                    pass	                
+	                	                	                
+            if "1200" in data.hex()[0:4] and b"/FOX" in data: 
 	                json_result = get_available_room(data.hex()[10:])
 	                parsed_data = json.loads(json_result)
 	                uid = parsed_data["5"]["data"]["1"]["data"]
 	                sender_id = parsed_data["5"]["data"]["1"]["data"]
 	                sender_name = parsed_data['5']['data']['9']['data']['1']['data']
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
  
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
          
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
-	                clients.send(self.GenResponsMsg(response_message))
-	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FF00]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                               
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                               
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
               
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
                
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][0000F8]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF0000]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][00FFFF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][BBBF75]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                
 	                clients.send(self.GenResponsMsg(response_message))
 	                time.sleep(1)	                
-	                response_message = f"""[C][B][FF00FF]BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX BLRX"""	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
 	                clients.send(self.GenResponsMsg(response_message))
 
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+        
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][0000F8]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF0000]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FFFF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][BBBF75]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][00FF00]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+	                time.sleep(1)	                
+	                response_message = f"""[C][B][FF00FF]F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X F4X"""	                
+	                clients.send(self.GenResponsMsg(response_message))
+
+	                	                	                	                	                	                	                
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     
     def  parse_my_message(self, serialized_data):
